@@ -11,7 +11,7 @@ Page({
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
     //蓝牙相关
     bluetooth:{
-      connected: "",
+      connected: '',
       foundlist:[],
       finding:true    //是否正在搜索蓝牙
     }
@@ -65,6 +65,7 @@ Page({
   },
   bluetoothSearch(){
     const _this  = this;
+    let btInfo = JSON.parse(JSON.stringify(_this.data.bluetooth));
     console.log("start bluetooth searching");
     wx.openBluetoothAdapter({
       success (res) {
@@ -80,7 +81,6 @@ Page({
               //console.dir(devices);
               devices.forEach(function(item){
                 //console.log(item.name +  '  ' + item.deviceId);
-                let btInfo = JSON.parse(JSON.stringify(_this.data.bluetooth));
                 if(btInfo.foundlist.length == 0){
                   btInfo.foundlist.push(item);
                 }else{
@@ -91,6 +91,7 @@ Page({
                     bluetooth: btInfo
                   });
                 }
+                //console.log(btInfo);
               });
               //console.log(_this.ab2hex(devices[0].advertisData))
             });
@@ -106,5 +107,133 @@ Page({
         console.log(e);
       }
     });
+  },
+  connectRobot(e){
+    console.log(e);
+    const _this = this;
+    const chooseddevice = e.currentTarget.dataset['bluetooth'];
+    let btInfo = JSON.parse(JSON.stringify(_this.data.bluetooth));
+    wx.showModal({
+      title: '提示',
+      content:"确定连接此设备吗？",
+      success:function(res){
+        if(res.confirm){
+          wx.showLoading({
+            title: "连接中..."
+          });
+          wx.createBLEConnection({
+            deviceId: chooseddevice.deviceId,
+            success(res){
+              console.log("蓝牙连接成功");
+              btInfo.connected = chooseddevice;
+              btInfo.finding = false;
+              //1. 获取此蓝牙设备的serviceId
+              wx.getBLEDeviceServices({
+                deviceId: chooseddevice.deviceId,
+                success (res) {
+                  console.log('device services:', res.services);
+                  btInfo.connected.serviceId =  res.services[1].uuid;
+                  //2. 获取此蓝牙设备的Characteristics
+                  wx.getBLEDeviceCharacteristics({
+                    deviceId: chooseddevice.deviceId,
+                    serviceId: btInfo.connected.serviceId,
+                    success:function(res){
+                      console.log('res.characteristics', res.characteristics);
+                      console.log('res.characteristics[0]', res.characteristics[0]);
+                      btInfo.connected.characteristicId = res.characteristics[0].uuid;
+                      //3. 关闭蓝牙搜索
+                      wx.stopBluetoothDevicesDiscovery({});
+                      _this.setData({
+                        bluetooth: btInfo
+                      });
+                    }
+                  });
+                }
+              });
+            },
+            fail(e){
+              console.log(e);
+              console.log("蓝牙连接失败!");
+              wx.hideLoading({
+                success: (res) => {
+                  wx.showToast({
+                    title: '连接失败',
+                  });
+                },
+              });
+            },
+            complete(){
+              wx.hideLoading({});
+            }
+          });
+        }
+      }
+    });
+  },
+  setbluetooth(){
+    const _this = this;
+    let btInfo = JSON.parse(JSON.stringify(_this.data.bluetooth));
+    wx.showActionSheet({
+      itemList: ['断开连接'],
+      success (res) {
+        if(res.tapIndex === 0){
+          //断开连接
+          wx.showLoading({
+            title: '断开连接',
+          });
+          wx.closeBLEConnection({
+            deviceId: _this.data.bluetooth.connected.deviceId,
+            success(){
+              btInfo.connected = '';
+              btInfo.finding = true;
+              _this.setData({
+                bluetooth: btInfo
+              });
+            }
+          });
+        }
+        wx.showToast({
+          title: res.tapIndex,
+        });
+      },
+      complete(){
+        wx.hideLoading({});
+      }
+    });
+  },
+  makecommand(e){
+    const _this = this;
+    const command = e.currentTarget.dataset['command'];
+    let buffer = new ArrayBuffer(1);
+    if(command === 'front'){
+      buffer[0] = 'f';
+    }else if(command === 'back'){
+      buffer[0] = 'b';
+    }else if(command === 'left'){
+      buffer[0] = 'l';
+    }else if(command === 'right'){
+      buffer[0] = 'r';
+    }else if(command === 'stand'){
+      buffer[0] = 's';
+    }else if(command === 'sit'){
+      buffer[0] = 'i';
+    }else if(command === 'wave'){
+      buffer[0] = 'w';
+    }else if(command === 'shake'){
+      buffer[0] = 'h';
+    }
+
+    wx.writeBLECharacteristicValue({
+      deviceId: this.data.bluetooth.connected.deviceId,
+      serviceId: this.data.bluetooth.connected.serviceId,
+      characteristicId: this.data.bluetooth.connected.characteristicId,
+      value:buffer,
+      success (res) {
+        console.log('writeBLECharacteristicValue success', res.errMsg)
+      },fail(e){
+        console.log('writeBLECharacteristicValue fail', e)
+      }
+    });
+
   }
 })

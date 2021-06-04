@@ -5,6 +5,9 @@
     <block wx:if="{{bluetooth.connected === '' && bluetooth.finding === true}}">
       <mp-loading type="circle" tips="蓝牙搜索中" extClass="loading"></mp-loading>
     </block>
+    <block wx:elif="{{bluetooth.connected !== '' && bluetooth.finding !== true}}">
+      <view catchtap="setbluetooth" class="devicename">{{"已连接设备: " + bluetooth.connected.name}}</view>
+    </block>
   </view>
   <view class="userinfo">
     <block wx:if="{{canIUseOpenData}}" calss="userinfo-opendata">
@@ -29,11 +32,40 @@
   <block wx:if="{{bluetooth.connected === ''}}">
     <view class="bodycont">
       <view class="bluetootharea">
-        <view wx:for="{{bluetooth.foundlist}}" class="bluetoothitem">
-          {{index}}
+        <view wx:for="{{bluetooth.foundlist}}" class="bluetoothitem" catchtap="connectRobot" data-bluetooth="{{item}}">
+          <image class="spiderhead" src="{{index % 2 == 0 ? 'https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/spider1.png' : 'https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/spider2.png'}}" mode="aspectFit"></image>
+          <view class="btname">{{item.name}}</view>
         </view>
       </view>
       <view class="notice">请先连接机器人</view>
+    </view>
+  </block>
+  <block wx:elif="{{bluetooth.connected !== '' && bluetooth.finding !== true}}">
+    <view class="ctrlcont">
+    <!-- 左侧控制区域 -->
+      <view class="leftctrl">
+        <view class="oribox">
+          <view class="ctrlbtn frontbtn" catchtap="makecommand" data-command="front">
+            <image class="arrowico" mode="aspectFit" src="https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/uparrow_4f.svg"></image>
+          </view>
+          <view class="ctrlbtn backbtn" catchtap="makecommand" data-command="back">
+            <image class="arrowico" mode="aspectFit" src="https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/downarrow_4f.svg"></image>
+          </view>
+          <view class="ctrlbtn leftbtn" catchtap="makecommand" data-command="left">
+            <image class="arrowico" mode="aspectFit" src="https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/leftarrow_4f.svg"></image>
+          </view>
+          <view class="ctrlbtn rightbtn" catchtap="makecommand" data-command="right">
+            <image class="arrowico" mode="aspectFit" src="https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/rightarrow_4f.svg"></image>
+          </view>
+        </view>
+      </view>
+      <!-- 右侧控制区域 -->
+      <view class="rightctrl">
+        <view class="commandbtn" catchtap="makecommand" data-command="stand">站立</view>
+        <view class="commandbtn" catchtap="makecommand" data-command="sit">坐下</view>
+        <view class="commandbtn" catchtap="makecommand" data-command="wave">招手</view>
+        <view class="commandbtn" catchtap="makecommand" data-command="shake">握手</view>
+      </view>
     </view>
   </block>
 </view>

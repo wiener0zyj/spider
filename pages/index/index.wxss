@@ -27,6 +27,11 @@ page{
   height:50rpx;
   overflow:hidden;
 }
+.devicename{
+  height: 50rpx;
+  line-height: 50rpx;
+  text-align: left;
+}
 .loading{
   height:50rpx;
   width: auto;
@@ -60,7 +65,6 @@ page{
   min-height: 100rpx;
   flex-grow: 1;
   flex-shrink: 0;
-  background-color:blue;
   background-image:url("https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210604203913.jpg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -74,6 +78,15 @@ page{
   top:0;
   left:0;
 }
+.ctrlcont{
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:flex;
+  flex-direction: row;
+}
 .bluetootharea{
   width: 100%;
   height: 120rpx;
@@ -81,14 +94,90 @@ page{
   display:flex;
   flex-direction: row;
   justify-content: flex-start;
+  overflow-y: auto;
 }
 .bluetoothitem{
   width: 100rpx;
   height: 120rpx;
+  margin: 10rpx 20rpx;
+}
+.spiderhead{
+  height: 80rpx !important;
+  width: 80rpx !important;
+  border-radius:100%;
+  background-color:white;
+}
+.btname{
+  color:white;
+  width: 100%;
+  text-align: center;
 }
 .notice{
   width:100%;
   margin-top: 20rpx;
   text-align: center;
   color:white;
+}
+.leftctrl{
+  flex-grow: 1;
+  flex-shrink: 0;
+  height:100%;
+  width:50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position:relative;
+}
+.rightctrl{
+  flex-grow: 1;
+  flex-shrink: 0;
+  height:100%;
+  width:50%;
+  position:relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  align-content:center;
+}
+.oribox{
+  width: 180rpx;
+  height:180rpx;
+  position:relative;
+}
+.ctrlbtn{
+  width: 60rpx;
+  height:60rpx;
+  background-color:#0fa5bdb8;
+  position:absolute;
+}
+.frontbtn{
+  top: 0rpx;
+  left: 60rpx;
+}
+.backbtn{
+  top: 120rpx;
+  left:60rpx;
+}
+.leftbtn{
+  top:60rpx;
+  left:0rpx;
+}
+.rightbtn{
+  top:60rpx;
+  left:120rpx;
+}
+.arrowico{
+  width: 60rpx;
+  height:60rpx;
+}
+.commandbtn{
+  width: 40%;
+  height:60rpx;
+  color:white;
+  background-color:#0fa5bdb8;
+  line-height:60rpx;
+  text-align: center;
+  margin-bottom:12rpx;
+  margin-left:2rpx;
 }
