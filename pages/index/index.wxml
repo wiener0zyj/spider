@@ -1,0 +1,39 @@
+<!--index.wxml-->
+<!-- 头部信息栏 -->
+<view class="header">
+  <view class="bluetooth">
+    <block wx:if="{{bluetooth.connected === '' && bluetooth.finding === true}}">
+      <mp-loading type="circle" tips="蓝牙搜索中" extClass="loading"></mp-loading>
+    </block>
+  </view>
+  <view class="userinfo">
+    <block wx:if="{{canIUseOpenData}}" calss="userinfo-opendata">
+      <view class="userinfo-avatar" bindtap="bindViewTap">
+        <open-data type="userAvatarUrl"></open-data>
+      </view>
+      <open-data type="userNickName"></open-data>
+    </block>
+    <block wx:elif="{{!hasUserInfo}}">
+      <button wx:if="{{canIUseGetUserProfile}}" bindtap="getUserProfile"> 获取头像昵称 </button>
+      <button wx:elif="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
+      <view wx:else> 请使用1.4.4及以上版本基础库 </view>
+    </block>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+</view>
+<!-- 中部控制栏 -->
+<view class="body">
+  <block wx:if="{{bluetooth.connected === ''}}">
+    <view class="bodycont">
+      <view class="bluetootharea">
+        <view wx:for="{{bluetooth.foundlist}}" class="bluetoothitem">
+          {{index}}
+        </view>
+      </view>
+      <view class="notice">请先连接机器人</view>
+    </view>
+  </block>
+</view>

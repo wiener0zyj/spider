@@ -1,0 +1,94 @@
+/**index.wxss**/
+page{
+  display:flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  height:100%;
+  width: 100%;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #aaa;
+  height:50rpx;
+  padding:0 20rpx;
+  box-sizing: border-box;
+  overflow:hidden;
+  border-bottom: 1rpx solid rgb(241, 241, 241);
+}
+.bluetooth{
+  flex-grow: 1;
+  display:flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  height:50rpx;
+  overflow:hidden;
+}
+.loading{
+  height:50rpx;
+  width: auto;
+  min-width:170rpx;
+  margin:0 !important;
+  justify-content: flex-start !important;
+}
+.weui-loadmore{
+  margin:0 !important;
+}
+.userinfo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #333;
+  height:50rpx;
+  font-size: 16rpx !important;
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  width: 40rpx;
+  height: 40rpx;
+  margin: 5rpx;
+  border-radius: 50%;
+}
+
+.body{
+  width:100%;
+  height:calc(100% - 50rpx);
+  min-height: 100rpx;
+  flex-grow: 1;
+  flex-shrink: 0;
+  background-color:blue;
+  background-image:url("https://tiku-zaochunpai.oss-cn-shanghai.aliyuncs.com/tmp/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20210604203913.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position-y: bottom;
+  position:relative;
+}
+.bodycont{
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  top:0;
+  left:0;
+}
+.bluetootharea{
+  width: 100%;
+  height: 120rpx;
+  margin-top: 50rpx;
+  display:flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.bluetoothitem{
+  width: 100rpx;
+  height: 120rpx;
+}
+.notice{
+  width:100%;
+  margin-top: 20rpx;
+  text-align: center;
+  color:white;
+}
